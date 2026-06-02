@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "super_admin"] }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Anime": {
+      "title": "Anime",
+      "description": "Anime series or movie",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["series", "movie"] },
+        "status": { "type": "string", "enum": ["ongoing", "completed", "draft"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": { "$ref": "User" },
+      "description": "User profiles"
+    },
+    "/anime/{animeId}": {
+      "schema": { "$ref": "Anime" },
+      "description": "Anime content"
+    }
+  }
+}
