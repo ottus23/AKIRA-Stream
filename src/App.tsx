@@ -9,6 +9,7 @@ import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import Layout from './components/Layout';
 import LibraryPage from './components/LibraryPage';
+import AdminPanel from './components/AdminPanel';
 
 function ProtectedRoute({ children, adminOnly = false }: { children: JSX.Element, adminOnly?: boolean }) {
   const { user, role, loading } = useAuth();
@@ -30,7 +31,7 @@ export default function App() {
           <Route path="library" element={<LibraryPage />} />
           <Route path="selected" element={<ProtectedRoute><div>Selected Page</div></ProtectedRoute>} />
           <Route path="profile" element={<ProtectedRoute><div>Profile Page</div></ProtectedRoute>} />
-          <Route path="admin" element={<ProtectedRoute adminOnly={true}><div>Admin Panel</div></ProtectedRoute>} />
+          <Route path="admin" element={<ProtectedRoute adminOnly={true}><AdminPanel /></ProtectedRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>
