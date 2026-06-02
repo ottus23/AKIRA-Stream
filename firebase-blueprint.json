@@ -12,19 +12,49 @@
       },
       "required": ["uid", "email", "role"]
     },
-    "Anime": {
-      "title": "Anime",
-      "description": "Anime series or movie",
+    "Franchise": {
+      "title": "Franchise",
+      "description": "Grouping of related titles",
       "type": "object",
       "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Title": {
+      "title": "Title",
+      "description": "Anime title entity (series, movie, etc.)",
+      "type": "object",
+      "properties": {
+        "franchiseId": { "type": "string" },
         "title": { "type": "string" },
-        "description": { "type": "string" },
-        "type": { "type": "string", "enum": ["series", "movie"] },
+        "type": { "type": "string", "enum": ["series", "movie", "ova", "special", "trailer", "clip"] },
         "status": { "type": "string", "enum": ["ongoing", "completed", "draft"] },
         "genres": { "type": "array", "items": { "type": "string" } },
+        "synopsis": { "type": "string" },
+        "poster_url": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["title", "type", "status", "genres"]
+    },
+    "Source": {
+      "title": "Source",
+      "description": "Official YouTube source content",
+      "type": "object",
+      "properties": {
+        "source_name": { "type": "string" },
+        "source_type": { "type": "string" },
+        "source_url": { "type": "string" },
+        "youtube_channel_id": { "type": "string" },
+        "youtube_playlist_id": { "type": "string" },
+        "youtube_video_id": { "type": "string" },
+        "dub_language": { "type": "string" },
+        "caption_language": { "type": "string" },
+        "license_status": { "type": "string" },
+        "last_synced_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["source_name", "source_type", "source_url"]
     }
   },
   "firestore": {
@@ -32,45 +62,17 @@
       "schema": { "$ref": "User" },
       "description": "User profiles"
     },
-    "/anime/{animeId}": {
-      "schema": { "$ref": "Anime" },
-      "description": "Anime content"
+    "/franchises/{franchiseId}": {
+      "schema": { "$ref": "Franchise" },
+      "description": "Anime franchises"
     },
-    "/movies/{movieId}": {
-      "schema": { "$ref": "Anime" },
-      "description": "Movies"
-    },
-    "/seasons/{seasonId}": {
-      "schema": {
-        "type": "object",
-        "properties": {
-          "animeId": { "type": "string" },
-          "seasonNumber": { "type": "number" },
-          "title": { "type": "string" }
-        },
-        "required": ["animeId", "seasonNumber"]
-      },
-      "description": "Seasons of series"
-    },
-    "/episodes/{episodeId}": {
-      "schema": {
-        "type": "object",
-        "properties": {
-          "seasonId": { "type": "string" },
-          "episodeNumber": { "type": "number" },
-          "title": { "type": "string" }
-        },
-        "required": ["seasonId", "episodeNumber"]
-      },
-      "description": "Episodes of seasons"
+    "/titles/{titleId}": {
+      "schema": { "$ref": "Title" },
+      "description": "Anime titles"
     },
     "/sources/{sourceId}": {
-      "schema": { "type": "object" },
-      "description": "Video sources"
-    },
-    "/subtitles/{subtitleId}": {
-      "schema": { "type": "object" },
-      "description": "Subtitle files"
+      "schema": { "$ref": "Source" },
+      "description": "Content sources"
     }
   }
 }
