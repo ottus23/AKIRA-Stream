@@ -3,6 +3,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { JSX } from 'react';
+import { useAuth } from './context/AuthContext';
+import Login from './components/Login';
+import Layout from './components/Layout';
+
+function ProtectedRoute({ children, adminOnly = false }: { children: JSX.Element, adminOnly?: boolean }) {
+  const { user, role, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" />;
+  if (adminOnly && role !== 'super_admin') return <Navigate to="/" />;
+
+  return children;
+}
+
 export default function App() {
-  return <div></div>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          <Route index element={<div>Home Page</div>} />
+          <Route path="library" element={<div>Library Page</div>} />
+          <Route path="selected" element={<div>Selected Page</div>} />
+          <Route path="profile" element={<div>Profile Page</div>} />
+          <Route path="admin" element={<div>Admin Panel</div>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }

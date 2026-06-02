@@ -34,6 +34,42 @@
     "/anime/{animeId}": {
       "schema": { "$ref": "Anime" },
       "description": "Anime content"
+    },
+    "/movies/{movieId}": {
+      "schema": { "$ref": "Anime" },
+      "description": "Movies"
+    },
+    "/seasons/{seasonId}": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "animeId": { "type": "string" },
+          "seasonNumber": { "type": "number" },
+          "title": { "type": "string" }
+        },
+        "required": ["animeId", "seasonNumber"]
+      },
+      "description": "Seasons of series"
+    },
+    "/episodes/{episodeId}": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seasonId": { "type": "string" },
+          "episodeNumber": { "type": "number" },
+          "title": { "type": "string" }
+        },
+        "required": ["seasonId", "episodeNumber"]
+      },
+      "description": "Episodes of seasons"
+    },
+    "/sources/{sourceId}": {
+      "schema": { "type": "object" },
+      "description": "Video sources"
+    },
+    "/subtitles/{subtitleId}": {
+      "schema": { "type": "object" },
+      "description": "Subtitle files"
     }
   }
 }

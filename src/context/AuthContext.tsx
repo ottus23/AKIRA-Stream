@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, onAuthStateChanged, signOut, signInWithPopup } from 'firebase/auth';
+import { User, onAuthStateChanged, signOut, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db, googleProvider, twitterProvider } from '../lib/firebase';
 
@@ -8,6 +8,8 @@ interface AuthContextType {
   role: 'user' | 'super_admin' | null;
   loading: boolean;
   signIn: (provider: 'google' | 'twitter') => Promise<void>;
+  signInWithEmail: (email: string, pass: string) => Promise<void>;
+  signUpWithEmail: (email: string, pass: string) => Promise<void>;
   signOutUser: () => Promise<void>;
 }
 
@@ -16,6 +18,8 @@ const AuthContext = createContext<AuthContextType>({
   role: null,
   loading: true,
   signIn: async () => {},
+  signInWithEmail: async () => {},
+  signUpWithEmail: async () => {},
   signOutUser: async () => {},
 });
 
@@ -54,13 +58,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const p = provider === 'google' ? googleProvider : twitterProvider;
     await signInWithPopup(auth, p);
   };
+  
+  const signInWithEmail = async (email: string, pass: string) => {
+      await signInWithEmailAndPassword(auth, email, pass);
+  };
+  
+  const signUpWithEmail = async (email: string, pass: string) => {
+      await createUserWithEmailAndPassword(auth, email, pass);
+  };
 
   const signOutUser = async () => {
     await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, loading, signIn, signOutUser }}>
+    <AuthContext.Provider value={{ user, role, loading, signIn, signInWithEmail, signUpWithEmail, signOutUser }}>
       {!loading && children}
     </AuthContext.Provider>
   );
