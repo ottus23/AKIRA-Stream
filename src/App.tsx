@@ -24,12 +24,12 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<div>Home Page</div>} />
           <Route path="library" element={<div>Library Page</div>} />
-          <Route path="selected" element={<div>Selected Page</div>} />
-          <Route path="profile" element={<div>Profile Page</div>} />
-          <Route path="admin" element={<div>Admin Panel</div>} />
+          <Route path="selected" element={<ProtectedRoute><div>Selected Page</div></ProtectedRoute>} />
+          <Route path="profile" element={<ProtectedRoute><div>Profile Page</div></ProtectedRoute>} />
+          <Route path="admin" element={<ProtectedRoute adminOnly={true}><div>Admin Panel</div></ProtectedRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>
