@@ -21,9 +21,10 @@
         "description": { "type": "string" },
         "type": { "type": "string", "enum": ["series", "movie"] },
         "status": { "type": "string", "enum": ["ongoing", "completed", "draft"] },
+        "genres": { "type": "array", "items": { "type": "string" } },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["title", "type", "status"]
+      "required": ["title", "type", "status", "genres"]
     }
   },
   "firestore": {

@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Function to check if user is super_admin
+    function isSuperAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /anime/{animeId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+    
+    match /movies/{movieId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+    
+    match /episodes/{episodeId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

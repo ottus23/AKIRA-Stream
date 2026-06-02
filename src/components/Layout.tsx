@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
-  const { signOutUser, role } = useAuth();
+  const { signOutUser, role, user } = useAuth();
   
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -11,8 +11,8 @@ export default function Layout() {
         <Link to="/library">Library</Link>
         <Link to="/selected">Selected</Link>
         <Link to="/profile">Profile</Link>
-        {role === 'super_admin' && <Link to="/admin">Admin</Link>}
-        <button onClick={signOutUser} className="ml-auto">Sign Out</button>
+        {user && role === 'super_admin' && <Link to="/admin">Admin</Link>}
+        {user && <button onClick={signOutUser} className="ml-auto">Sign Out</button>}
       </nav>
       <main className="p-4">
         <Outlet />
